@@ -3,6 +3,14 @@ const app = express();
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/db')
 
+const dotnv = require('dotenv');
+const conn = require('./config/db.js');
+
+dotnv.config();
+
+// connection to the DB
+conn();
+
 
 // mongoose.connect(mongoConfig.connectionString).then(() => {
 //     console.log("Database connected.");
