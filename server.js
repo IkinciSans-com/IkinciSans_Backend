@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/db');
-const ratingRoutes = require('./ratingRoutes'); // ratingRoutes.js dosyasının yolunu doğru şekilde belirtin
+const ratingRoutes = require('./app/routes/ratingRoutes'); // ratingRoutes.js dosyasının yolunu doğru şekilde belirtin
 
 mongoose.connect(mongoConfig.connectionString).then(() => {
     console.log("Database connected.");
