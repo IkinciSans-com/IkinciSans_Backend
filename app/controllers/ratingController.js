@@ -21,6 +21,7 @@ exports.createRating = async (req, res) => {
 
     res.status(201).json(savedRating);
   } catch (error) {
+    console.log(error); // Hata mesajını konsola yazdır
     res.status(500).json({ error: 'Derecelendirme oluşturulurken bir hata oluştu.' });
   }
 };
@@ -31,6 +32,7 @@ exports.getAllRatings = async (req, res) => {
     const ratings = await Rating.find();
     res.status(200).json(ratings);
   } catch (error) {
+    console.log(error); // Hata mesajını konsola yazdır
     res.status(500).json({ error: 'Derecelendirmeler getirilirken bir hata oluştu.' });
   }
 };
@@ -42,6 +44,7 @@ exports.getUserRatings = async (req, res) => {
     const ratings = await Rating.find({ user: userId });
     res.status(200).json(ratings);
   } catch (error) {
+    console.log(error); // Hata mesajını konsola yazdır
     res.status(500).json({ error: 'Derecelendirmeler getirilirken bir hata oluştu.' });
   }
 };
@@ -70,6 +73,7 @@ exports.updateRating = async (req, res) => {
   
       res.status(200).json(updatedRating);
     } catch (error) {
+      console.log(error); // Hata mesajını konsola yazdır
       res.status(500).json({ error: 'Derecelendirme güncellenirken bir hata oluştu.' });
     }
   };
@@ -87,6 +91,7 @@ exports.updateRating = async (req, res) => {
   
       res.status(200).json({ message: 'Derecelendirme başarıyla silindi.' });
     } catch (error) {
+      console.log(error); // Hata mesajını konsola yazdır
       res.status(500).json({ error: 'Derecelendirme silinirken bir hata oluştu.' });
     }
   };
@@ -107,6 +112,7 @@ exports.getUserRatingAverage = async (req, res) => {
   
       res.status(200).json({ averageRating });
     } catch (error) {
+      console.log(error); // Hata mesajını konsola yazdır
       res.status(500).json({ error: 'Kullanıcının derecelendirme ortalaması getirilirken bir hata oluştu.' });
     }
   };
