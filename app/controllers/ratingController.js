@@ -1,18 +1,19 @@
 const Rating = require('../models/rating');
+const mongoose = require('mongoose');
 
 // Derecelendirme oluşturma
 exports.createRating = async (req, res) => {
   try {
-    const { user, product, rating, comment } = req.body;
+    const { userId, productId, rating, comment } = req.body;
 
-    const existingRating = await Rating.findOne({ user, product });
+    const existingRating = await Rating.findOne({ user: userId, product: productId });
     if (existingRating) {
       return res.status(400).json({ error: 'Bu kullanıcı zaten bu ürün için bir derecelendirme yapmış.' });
     }
 
     const newRating = new Rating({
-      user,
-      product,
+      user: userId,
+      product: productId,
       rating,
       comment
     });
@@ -57,7 +58,7 @@ exports.updateRating = async (req, res) => {
   
       const existingRating = await Rating.findById(ratingId);
       if (!existingRating) {
-        return res.status(404).json({ error: 'Rating bulunamadı.' });
+        return res.status(404).json({ error: 'Derecelendirme bulunamadı.' });
       }
   
       // Kullanıcının aynı ürün için daha önce rating yapmış olup olmadığını kontrol et
@@ -98,21 +99,21 @@ exports.updateRating = async (req, res) => {
   
 // Belirli bir kullanıcının tüm ürünlerine ait rating ortalamasını getirme
 exports.getUserRatingAverage = async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      
-      const ratings = await Rating.find({ user: userId });
-      if (ratings.length === 0) {
-        return res.status(404).json({ error: 'Bu kullanıcının henüz derecelendirmesi bulunmamaktadır.' });
-      }
-  
-      const totalRatings = ratings.length;
-      const totalRatingSum = ratings.reduce((sum, rating) => sum + rating.rating, 0);
-      const averageRating = totalRatingSum / totalRatings;
-  
-      res.status(200).json({ averageRating });
-    } catch (error) {
-      console.log(error); // Hata mesajını konsola yazdır
-      res.status(500).json({ error: 'Kullanıcının derecelendirme ortalaması getirilirken bir hata oluştu.' });
+  try {
+    const userId = mongoose.Types.ObjectId(req.params.userId); // ObjectId oluştur
+    
+    const ratings = await Rating.find({ user: userId });
+    if (ratings.length === 0) {
+      return res.status(404).json({ error: 'Bu kullanıcının henüz derecelendirmesi bulunmamaktadır.' });
     }
-  };
+
+    const totalRatings = ratings.length;
+    const totalRatingSum = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+    const averageRating = totalRatingSum / totalRatings;
+
+    res.status(200).json({ averageRating });
+  } catch (error) {
+    console.log(error); // Hata mesajını konsola yazdır
+    res.status(500).json({ error: 'Kullanıcının derecelendirme ortalaması getirilirken bir hata oluştu.' });
+  }
+};
