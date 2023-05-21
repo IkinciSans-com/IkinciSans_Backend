@@ -3,18 +3,14 @@ const Schema = mongoose.Schema;
 
 // Sahip olabileceği özellikler 
 const itemSchema = new Schema({
-  productId: {
-    type: String,
-    required: true,
-    unique: true
-  },
   productName: {
     type: String,
     required: true
   },
   productDescription: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   productCategory: {
     type: String,
@@ -24,16 +20,22 @@ const itemSchema = new Schema({
     type: String,
     required: true
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
   
   /*
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
+  productId: {
+    type: String,
+    required: true,
+    unique: true
   }
+
   */
 });
 

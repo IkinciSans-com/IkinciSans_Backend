@@ -1,29 +1,17 @@
-router.post('/', async (req, res) => {
-  // newItem adlı bir yeni öğe oluşturulur ve req.body kullanılarak alınan veriler ile özellikleri atanır.
-  try {
-    const newItem = new Item({
-      id : req.body.productId,
-      name: req.body.productName,
-      description: req.body.productDescription,
-      category: req.body.productCategory,
-      photo: req.body.productPhoto,
-      //owner: req.body.owner,
-      //createdAt: req.body.createdAt
-    });
+const express = require('express');
+const router = express.Router();
+const productController = require('../controllers/productController');
 
-    // await anahtar kelimesi ile newItem.save() metodu kullanılarak yeni öğe MongoDB veritabanına kaydedilir.
-    const savedItem = await newItem.save();
+// Tüm ürünleri listelemek için GET isteği
+router.get('/', productController.getAllProducts);
 
-    res.json(savedItem);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
+// Yeni bir ürün oluşturmak için POST isteği
+router.post('/', productController.createProduct);
 
+// Bir ürünü güncellemek için PUT isteği
+router.put('/:id', productController.updateProduct);
 
-router.route('/signup').post(productController.createProduct);
+// Bir ürünü silmek için DELETE isteği
+router.delete('/:id', productController.deleteProduct);
 
-router.route('/login').post(authController.loginUser);
-
-
+module.exports = router;
