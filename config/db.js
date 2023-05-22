@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
+// MongoDB bağlantısı için gerekli yapılandırmalar
 
+const mongoose = require('mongoose');
 
 // Veritabanı bağlantısı için gerekli yapılandırmaları yapın
 const dbOptions = {
@@ -12,9 +13,9 @@ const dbOptions = {
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.DB_URI, dbOptions);
-    console.log('Connected to the DB succesfully');
+    console.log('Database connected succesfully.');
   } catch (error) {
-    console.error('DB connection err:', error.message);
+    console.error('Database connection failed:', error.message);
     process.exit(1); // Uygulamayı kapat
   }
 };
