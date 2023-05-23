@@ -1,4 +1,25 @@
 {
+  "name": "ikincisans_backend",
+  "version": "1.0.0",
+  "description": "IkinciSans.com backend project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IkinciSans-com/IkinciSans_Backend.git"
+  },
+  "keywords": [
+    "node.js",
+    "mongoose"
+  ],
+  "author": "SabaUrgup",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IkinciSans-com/IkinciSans_Backend/issues"
+  },
+  "homepage": "https://github.com/IkinciSans-com/IkinciSans_Backend#readme",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
