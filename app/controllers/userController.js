@@ -103,7 +103,7 @@ const updateUser = async (req, res) => {
 }
 
 // Bir kullanıcıyı silmek için DELETE isteği
-const deleteMe = async (req, res) => {
+const deleteUser = async (req, res) => {
     try {
         // İstekten gelen kullanıcıyı alın
         const user = req.user;
@@ -118,3 +118,11 @@ const deleteMe = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+module.exports = {
+    getUser,
+    register,
+    login,
+    updateUser,
+    deleteUser
+};
