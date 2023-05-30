@@ -4,18 +4,18 @@ const messageController = require('../controllers/messageController');
 const router = express.Router();
 
 //yeni bir mesaj oluşturma
-router.post('/', messageController.createMessage);
+router.post('/messages', messageController.createMessage);
 
 //tüm mesajlari listeleme
-router.get('/', messageController.getAllMessages);
+router.get('/messages', messageController.getAllMessages);
 
 //belirli bir mesaji getirme
-router.get('/:messageId', messageController.getMessage);
+router.get('/messages/:messageId', messageController.getMessage);
 
 //mesaj guncelleme
-router.put('/:messageId', messageController.updateMessage);
+router.put('/messages/:messageId', messageController.updateMessage);
 
 //mesaj silme
-router.delete('/:messageId', messageController.deleteMessage);
+router.delete('/messages/:messageId', messageController.deleteMessage);
 
 module.exports = router;
