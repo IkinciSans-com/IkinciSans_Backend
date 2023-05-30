@@ -51,7 +51,7 @@ function updateMessageById(message_id, newContent) {
   });
 }
 
-//mmesaji silmek icin fonksiyon
+//mesaji silmek icin fonksiyon
 function deleteMessageById(message_id) {
   Message.findByIdAndDelete(message_id, (err, message) => {
     if (err) {
