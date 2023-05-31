@@ -1,11 +1,15 @@
-// İlgili modellerin içe aktarılması
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
+const generateToken = require('../utils/helpers');
 
 // İlgili kullanıcıyı almak için GET isteği
 const getUser = async (req, res) => {
     try {
         // İstekten gelen kullanıcıyı alın
-        const user = req.user;
+        const email = req.params.email;
+
+        // Kullanıcıyı veritabanından mail adresine göre bulun
+        const user = await User.findOne({ email });
     
         // Başarılı yanıt döndürün
         res.status(200).json(user);
@@ -16,16 +20,17 @@ const getUser = async (req, res) => {
 };
 
 // Yeni bir kullanıcı oluşturmak için POST isteği
-const register = async (req, res) => {
+const signup = async (req, res) => {
     try {
-        // Kullanıcı bilgilerini alın
-        const { name, surname, email, password } = req.body;
-
+       const {email, name, surname, password, birthDate, phone, gender} = req.body;
+        
         // Password'u hashleyin
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Kullanıcı modeli üzerinden yeni bir kullanıcı oluşturun
-        const newUser = new User({ name, surname, email, hashedPassword });
+        const newUser = new User({
+                name, surname, gender, birthDate, phone, email, hashedPassword
+        });
 
         // Kullanıcıyı veritabanına kaydedin
         await newUser.save();
@@ -56,14 +61,20 @@ const login = async (req, res) => {
 
         // Şifre yanlışsa hata yanıtı döndürün
         if (!isPasswordCorrect) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid creds' });
         }
 
-        // Kullanıcıyı oturum açtırın
-        req.session.user = user;
-
         // Başarılı yanıt döndürün
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({
+            user: {
+                id: user._id,
+                name: user.name,
+                surname: user.surname,
+                email: user.email,
+                role: user.role,
+            },
+            token: generateToken(user._id),
+        });
     } catch (error) {
         // Hata durumunda hata yanıtı döndürün
         res.status(500).json({ error: error.message });
@@ -74,13 +85,13 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Güncellenmek istenen kullanıcının ID'sini alın
-        const userId = req.params.id;
+        const email = req.params.email;
 
         // Güncellenmek istenen kullanıcı bilgilerini alın
         const { name, surname } = req.body;
 
         // Kullanıcıyı veritabanından bulun
-        const user = await User.findOne({ userId });
+        const user = await User.findOne({ email });
 
         // Kullanıcı bulunamazsa hata yanıtı döndürün
         if (!user) {
@@ -106,7 +117,11 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         // İstekten gelen kullanıcıyı alın
-        const user = req.user;
+        // /api/1.0/users/${email}
+        const email = req.params.email;
+
+        // Kullanıcıyı veritabanından bulun
+        const user = await User.findOne({ email });
 
         // Kullanıcıyı veritabanından silin
         await user.remove();
@@ -121,7 +136,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
     getUser,
-    register,
+    signup,
     login,
     updateUser,
     deleteUser
