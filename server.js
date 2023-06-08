@@ -5,6 +5,7 @@ const dotnv = require('dotenv');
 const port = 3000;
 const ratingRoutes = require('./app/routes/ratingRoutes');
 const productRoutes = require('./app/routes/productRoutes');
+const userRoutes = require('./app/routes/userRoutes');
 
 dotnv.config();
 
@@ -18,6 +19,9 @@ app.use('/api', ratingRoutes);
 
 // Product rotalarını kullanmak için
 app.use('/api', productRoutes);
+
+// User rotalarını kullanmak için
+app.use('/api', userRoutes);
 
 app.listen(port, () => {
     console.log(`Server is live on port ${port}`);
