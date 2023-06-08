@@ -15,7 +15,7 @@ const userSchema = new Schema({
     enum: ['MALE', 'FEMALE'],
     required: true
   },
-  birthdate:{
+  birthDate:{
     type: String,
     required: true
   },
@@ -28,7 +28,7 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  password: {
+  hashedPassword: {
     type: String,
     required: true
   },
@@ -39,5 +39,4 @@ const userSchema = new Schema({
 });
 
 const User = mongoose.model('User', userSchema);
-
 module.exports = User;

@@ -1,5 +1,4 @@
 // MongoDB bağlantısı için gerekli yapılandırmalar
-
 const mongoose = require('mongoose');
 
 // Veritabanı bağlantısı için gerekli yapılandırmaları yapın

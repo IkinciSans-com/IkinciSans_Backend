@@ -2,6 +2,20 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const generateToken = require('../utils/helpers');
 
+// Tüm kullanıcıları getirmek için GET isteği
+const getUsers = async (req, res) => {
+    try {
+        // Tüm kullanıcıları veritabanından alın
+        const userList = await User.find();
+
+        // Başarılı yanıt döndürün
+        res.status(200).json(userList);
+    } catch (error) {
+        // Hata durumunda hata yanıtı döndürün
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // İlgili kullanıcıyı almak için GET isteği
 const getUser = async (req, res) => {
     try {
@@ -22,16 +36,16 @@ const getUser = async (req, res) => {
 // Yeni bir kullanıcı oluşturmak için POST isteği
 const signup = async (req, res) => {
     try {
-       const {email, name, surname, password, birthDate, phone, gender} = req.body;
+       const {email, name, surname, password, birthDate, phone, gender} = await req.body;
         
         // Password'u hashleyin
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Kullanıcı modeli üzerinden yeni bir kullanıcı oluşturun
-        const newUser = new User({
-                name, surname, gender, birthDate, phone, email, hashedPassword
+        const newUser = await new User({
+                name, surname, gender, phone, birthDate, email, hashedPassword,
         });
-
+        
         // Kullanıcıyı veritabanına kaydedin
         await newUser.save();
 
@@ -42,6 +56,7 @@ const signup = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
 
 // Bir kullanıcıyla giriş yapmak için POST isteği
 const login = async (req, res) => {
@@ -57,7 +72,7 @@ const login = async (req, res) => {
         }
 
         // Kullanıcının şifresini kontrol edin
-        const isPasswordCorrect = await bcrypt.compare(password, user.hashedPassword);
+        const isPasswordCorrect = await bcrypt.compare(password, user.hashedPassword );
 
         // Şifre yanlışsa hata yanıtı döndürün
         if (!isPasswordCorrect) {
@@ -71,9 +86,8 @@ const login = async (req, res) => {
                 name: user.name,
                 surname: user.surname,
                 email: user.email,
-                role: user.role,
             },
-            token: generateToken(user._id),
+            token: generateToken(user.__id),
         });
     } catch (error) {
         // Hata durumunda hata yanıtı döndürün
@@ -136,6 +150,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
     getUser,
+    getUsers,
     signup,
     login,
     updateUser,
